@@ -60,15 +60,18 @@ function Home() {
     function handleMethodChange(){
         setIsSignUpActive(!isSignUpActive)
     }  
+
+
+
   return (
     <>
-      <div className='border h-[100vh] justify-center align-middle' >
+      <div className='border text-center' >
         <form action="" className=''>
             {isSignUpActive && <legend>SignUp</legend>}
             {!isSignUpActive && <legend>SignIn</legend>}
             <fieldset>
                 <ul>
-                    <li className='bg-blue-300'>
+                    <li className=''>
                         <label htmlFor="email">Email</label>
                         <input type="email" id='email' onChange={handleEmailChange} />
 
