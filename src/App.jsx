@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { onAuthStateChanged  } from 'firebase/auth'
 import {auth} from './firebase'
 import Private from './pages/Private'
+import Spinner from 'react-bootstrap/Spinner';
 
 
 
@@ -33,7 +34,7 @@ function App() {
 
     
     if(isFetching){
-      return <h2>Loading....</h2>
+      return <Spinner animation="border" />;
     }
   
   

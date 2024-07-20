@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import {createUserWithEmailAndPassword, reauthenticateWithRedirect, signInWithEmailAndPassword} from "firebase/auth"
 import {auth} from '../firebase'
+import { Navigate, useNavigate } from 'react-router-dom'
 function Home() {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isSignUpActive, setIsSignUpActive] = useState(true)
     const [error, setError] = useState("")
+    const navigate = useNavigate()
 
     function handleEmailChange(event) {
         setEmail(event.target.value);
@@ -25,6 +27,7 @@ function Home() {
         .then((userCredentials) => {
             const user =  userCredentials.user;
             console.log(user)
+            navigate('Private')
         })
         .catch((error) => {
              const errorCode = error.code;
@@ -43,18 +46,17 @@ function Home() {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
             const user = userCredentials.user;
+            console.log()
 
         })
+
+
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message
             setError(errorMessage)
             console.log({error})
        })   
-
-
-
-
     }
 
     function handleMethodChange(){
@@ -63,31 +65,33 @@ function Home() {
 
 
 
+
   return (
     <>
-      <div className='border text-center' >
+      <div className='border text-center p-20' >
         <form action="" className=''>
-            {isSignUpActive && <legend>SignUp</legend>}
-            {!isSignUpActive && <legend>SignIn</legend>}
+            {isSignUpActive && <legend className='text-4xl font-semibold mb-5'>SignUp</legend>}
+            {!isSignUpActive && <legend className='text-4xl font-semibold mb-5'>SignIn</legend>}
             <fieldset>
                 <ul>
                     <li className=''>
-                        <label htmlFor="email">Email</label>
-                        <input type="email" id='email' onChange={handleEmailChange} />
+                        <label className='text-left'  htmlFor="email">Email</label> <br />
+                        <input className='border p-2' type="email" id='email' onChange={handleEmailChange} />
 
                     </li>
                     <li>
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id='password' onChange={handlePasswordChange} />
+                        <label  className='text-left' htmlFor="password">Password</label>
+                        <br />
+                        <input className='border p-2' type="password" id='password' onChange={handlePasswordChange} />
 
                     </li>
                    
                 </ul>
                 {isSignUpActive && (
-                    <button type='button' onClick={handleSignup} >SignUp</button>
+                    <button type='button' className='mt-5 p-2 border bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold' onClick={handleSignup} >SignUp</button>
                 )}
                 {!isSignUpActive && (
-                    <button type='button' onClick={handleSignin} >SignIn</button>
+                    <button type='button' className='mt-5 p-2 border bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold' onClick={handleSignin} >SignIn</button>
                 )}
             </fieldset>
             {error &&  error}
