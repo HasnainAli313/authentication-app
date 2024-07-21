@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes,Route } from 'react-router-dom'
 import Home  from './pages/Home'
-// import Private  from './pages/Private'
 import { useEffect, useState } from 'react'
 import ProtectedRoute from './components/ProtectedRoute'
 import { onAuthStateChanged  } from 'firebase/auth'
@@ -18,15 +17,9 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth,(user) => {
-     
-      if(user){
         setUser(user)
         setIsFetching(false)
-      return
-      }
 
-      setUser(null)
-      setIsFetching(false)
     })
 
     return () => unsubscribe()
@@ -34,7 +27,15 @@ function App() {
 
     
     if(isFetching){
-      return <Spinner animation="border" />;
+      return(
+       
+          <div className='text-center m-28'>
+          <Spinner animation="border" />;
+          </div>
+      
+
+      ) 
+        
     }
   
   

@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import {createUserWithEmailAndPassword, reauthenticateWithRedirect, signInWithEmailAndPassword} from "firebase/auth"
+import {createUserWithEmailAndPassword ,signInWithEmailAndPassword} from "firebase/auth"
 import {auth} from '../firebase'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
 function Home() {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isSignUpActive, setIsSignUpActive] = useState(true)
     const [error, setError] = useState("")
+
     const navigate = useNavigate()
 
     function handleEmailChange(event) {
@@ -20,39 +22,36 @@ function Home() {
 
     function handleSignup(){
         if(!email || !password){
-            setError("Email and password both are required")
+            setError("Please enter email and password!")
             return
         }
         createUserWithEmailAndPassword(auth,email,password)
         .then((userCredentials) => {
             const user =  userCredentials.user;
             console.log(user)
-            navigate('Private')
+            navigate('/Private')
         })
         .catch((error) => {
-             const errorCode = error.code;
              const errorMessage = error.message
              setError(errorMessage)
              console.log({error})
         })
         
     }
-    function handleSignin(){
+    function handleSignin(e){
+        e.preventDefault();
         if(!email || !password){
-            setError("Email and password both are required")
+            setError("Please enter email and password")
             return ;
         }
 
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
             const user = userCredentials.user;
-            console.log()
+            navigate('/private')
 
         })
-
-
         .catch((error) => {
-            const errorCode = error.code;
             const errorMessage = error.message
             setError(errorMessage)
             console.log({error})
@@ -68,37 +67,38 @@ function Home() {
 
   return (
     <>
-      <div className='border text-center p-20' >
-        <form action="" className=''>
-            {isSignUpActive && <legend className='text-4xl font-semibold mb-5'>SignUp</legend>}
-            {!isSignUpActive && <legend className='text-4xl font-semibold mb-5'>SignIn</legend>}
-            <fieldset>
-                <ul>
-                    <li className=''>
-                        <label className='text-left'  htmlFor="email">Email</label> <br />
-                        <input className='border p-2' type="email" id='email' onChange={handleEmailChange} />
-
-                    </li>
-                    <li>
-                        <label  className='text-left' htmlFor="password">Password</label>
-                        <br />
-                        <input className='border p-2' type="password" id='password' onChange={handlePasswordChange} />
-
-                    </li>
+    <div className='main'>
+      <div className='border rounded-xl  bg-gray-200 text-center m-10  md:w-[500px] p-5  md:p-20' >
+        <form action="" className='  ' >
+            {isSignUpActive && <legend className='text-4xl font-semibold '>SignUp</legend>}
+            {!isSignUpActive && <legend className='text-4xl font-semibold '>SignIn</legend>}
+            <fieldset className='text-center'>  
+                   <div className='flex flex-col align-middle text-left w-[100%]  gap-1'>
+                    
+                        <label className='pb-2 pt-2 font-semibold'  htmlFor="email">Email</label> 
+                        <input className='border-2 border-gray-400 outline-1 outline-blue-400   sm:w-[400px] p-2 ' type="email" id='email' onChange={handleEmailChange} />
                    
-                </ul>
+                        <label  className='pb-2 pt-2 font-semibold' htmlFor="password">Password</label>
+                        <input className='border-2 border-gray-400  outline-1 outline-blue-400  sm:w-[400px] p-2 ' type="password" id='password' onChange={handlePasswordChange} />
+                   
                 {isSignUpActive && (
-                    <button type='button' className='mt-5 p-2 border bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold' onClick={handleSignup} >SignUp</button>
+                        <button type='button' className='mt-5 p-2 border bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold sm:w-[400px] ' onClick={handleSignup} >SignUp</button>
                 )}
                 {!isSignUpActive && (
-                    <button type='button' className='mt-5 p-2 border bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold' onClick={handleSignin} >SignIn</button>
+                        <button type='button' className='mt-5 p-2 border bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold  sm:w-[400px]' onClick={handleSignin} >SignIn</button>
                 )}
+                </div>
+            <div >
+            {error && <p className='text-red-600'>{ error}</p> }
+            <div className=''>
+            {isSignUpActive && <a onClick={handleMethodChange} className='text-xl no-underline text-black' >Already have an account? <span className='text-blue-500'>Sign In</span> </a>}
+            {!isSignUpActive && <a onClick={handleMethodChange} className='text-xl no-underline text-black' >Do not have an account? <span className='text-blue-500'>Sign Up</span> </a>}
+            </div>
+            </div>
             </fieldset>
-            {error &&  error}
-            {isSignUpActive && <a onClick={handleMethodChange} >Already have an account? Sign In</a>}
-            {!isSignUpActive && <a onClick={handleMethodChange} >Do not have an account? Sign Up</a>}
         </form>
       </div>
+    </div>
     </>
   )
 }

@@ -7,10 +7,9 @@
     padding: 0px;
     box-sizing: border-box;
 }
-body{
+.main{
     height: 100vh;
-    justify-content: center;
     display: flex;
-    align-items: center;
-    font-size: 32px;
+    align-items: center; 
+    justify-content: center;
 }
